@@ -1,0 +1,78 @@
+<?php
+
+class profile extends controller
+{
+    
+     public function index()
+     {
+         
+           if(!$this->user->isLogged())
+          {
+              $this->redirect('login');
+          }
+
+         $this->document->addScript('views/scripts/profile.js');
+         $this->document->addStyle('views/stylesheets/profile.css');
+
+         
+        $this->template = 'profile';
+         
+       /* $this->data['profile_menu'] = array('Profile'=>'profile',
+                                              'Settings'=>'settings',
+                                              'Message'=>'message');*/
+        $this->data['action']='profile';
+        
+        $this->data['profile_pic']=  "../image/default-avatar.png";
+        
+        if ($this->request->server['REQUEST_METHOD'] == 'POST')
+        {
+            $post_data= array('firstname' =>$this->request->post['txt-profile-firstname'] ,
+                'lastname'=>$this->request->post['txt-profile-lastname'],
+                'email'=> $this->request->post['txt-profile-email']);
+           
+            if ($this->validate($post_data) && $this->user->isLogged())
+            {
+                $this->load->model('user');
+                $post_data['UserId'] = $this->user->getId();
+                $this->model_user->updateuser($post_data);
+                $this->redirect('profile'); //refresh the page after data update;
+            }
+        }
+        
+          
+        $this->data['first_name']= $this->user->getFirstName();
+        $this->data['last_name']= $this->user->getLastName();
+        $this->data['email']= $this->user->getEmail();
+        $this->data['sex']= $this->userprofile->get_sex();
+        $this->data['about'] = $this->user->getAbout();
+           
+        
+         
+              $this->data['profile_picture']= $this->userprofile->get_profile_picture();
+              
+          
+              $this->children = array('common/header','common/footer');
+         
+            $this->render();
+            
+            echo $this->output;
+          
+ 
+         
+     }
+     
+     
+     
+    private function validate($post)
+     {
+        
+         $status= TRUE;
+         
+         if ($post['firstname']=='' || $post['lastname']=='' || $post['email'] =='')
+         {
+             $status = false;
+
+         }
+         return $status;
+     }
+}
