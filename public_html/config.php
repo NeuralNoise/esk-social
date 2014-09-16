@@ -23,7 +23,7 @@ define ('DIR_TEMPLATE_IMAGE','/home3/eskinder/public_html/views/image/');
 define('DB_DRIVER', 'mysql');
 define('DB_HOSTNAME', 'localhost');
 define('DB_USERNAME', 'eskinder_esk');
-define('DB_PASSWORD', '123001');
+define('DB_PASSWORD', '');
 define('DB_DATABASE', 'eskinder_social');
 define('DB_PREFIX', 'oc_');
 ?>
